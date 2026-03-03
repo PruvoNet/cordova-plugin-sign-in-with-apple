@@ -108,10 +108,20 @@ function injectPreferences(currentEntitlements) {
  */
 function pathToEntitlementsFile() {
   if (entitlementsFilePath === undefined) {
-    entitlementsFilePath = path.join(getProjectRoot(), 'platforms', 'ios', getProjectName(), 'Resources', getProjectName() + '.entitlements');
+    var dirName = getProjectDirName();
+    entitlementsFilePath = path.join(getProjectRoot(), 'platforms', 'ios', dirName, 'Resources', dirName + '.entitlements');
   }
 
   return entitlementsFilePath;
+}
+
+// cordova-ios 8.0.0 renamed the project directory from the app name to 'App'
+function getProjectDirName() {
+  var name = getProjectName();
+  if (fs.existsSync(path.join(getProjectRoot(), 'platforms', 'ios', name + '.xcodeproj'))) {
+    return name;
+  }
+  return 'App';
 }
 
 /**
